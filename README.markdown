@@ -9,9 +9,7 @@ MCollective and the Oracle Java runtime on an RHEL or EL variant.
 # Quick Start #
 
 The example in the tests directory provides a good example of how the ActiveMQ
-module may be used.  In addition, the [MCollective
-Module](http://forge.puppetlabs.com/puppetlabs/mcollective) provides a good
-example of a service integrated with this ActiveMQ module.
+module may be used. 
 
     node default {
       notify { 'alpha': }
@@ -25,11 +23,6 @@ example of a service integrated with this ActiveMQ module.
       ->
       notify { 'omega': }
     }
-
-# Contact Information #
-
- * Jeff McCune <jeff@puppetlabs.com>
- * [Module Source Code](https://github.com/puppetlabs/puppetlabs-activemq)
 
 # Related Work #
 
