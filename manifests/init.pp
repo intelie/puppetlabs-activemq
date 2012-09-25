@@ -28,7 +28,8 @@ class activemq(
   $version       = 'present',
   $ensure        = 'running',
   $webconsole    = true,
-  $server_config = 'UNSET'
+  $server_config = 'UNSET',
+  $packagename	 = 'activemq'
 ) {
 
   validate_re($ensure, '^running$|^stopped$')
@@ -38,6 +39,7 @@ class activemq(
   $version_real = $version
   $ensure_real  = $ensure
   $webconsole_real = $webconsole
+  $packagename_real = $packagename
 
   # Since this is a template, it should come _after_ all variables are set for
   # this class.
@@ -53,6 +55,7 @@ class activemq(
   }
 
   class { 'activemq::packages':
+  	name	=> $packagename_real,
     version => $version_real,
     notify  => Class['activemq::service'],
   }

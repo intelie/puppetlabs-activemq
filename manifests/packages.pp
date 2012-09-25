@@ -11,6 +11,7 @@
 # Sample Usage:
 #
 class activemq::packages (
+  $name,
   $version,
   $home = '/usr/share/activemq'
 ) {
@@ -20,6 +21,7 @@ class activemq::packages (
 
   $version_real = $version
   $home_real    = $home
+  $name_real	= $name
 
   # Manage the user and group in Puppet rather than RPM
   group { 'activemq':
@@ -45,6 +47,7 @@ class activemq::packages (
   }
 
   package { 'activemq':
+  	name	=> $name_real,
     ensure  => $version_real,
     notify  => Service['activemq'],
   }
