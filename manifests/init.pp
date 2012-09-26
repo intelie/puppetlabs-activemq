@@ -68,7 +68,7 @@ class activemq(
     server_config 	=> $server_config_real,
     require       	=> Class['activemq::packages'],
     notify        	=> Class['activemq::service'],
-    path		  	=> "${home_dir}/conf/activemq.xml",
+    home_dir		=> $home_dir,
     java_initmemory => $java_initmemory,
     java_maxmemory 	=> $java_maxmemory,
   }
