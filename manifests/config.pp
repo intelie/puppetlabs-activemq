@@ -12,17 +12,23 @@
 #
 class activemq::config (
   $server_config,
-  $home_dir 	   = '/usr/share/activemq',
-  $log_dir 		   = '/var/log/activemq',
-  $java_initmemory = 512,
-  $java_maxmemory  = 1024
+  $home_dir 	   	 = '/usr/share/activemq',
+  $log_dir 		   	 = '/var/log/activemq', 
+  $java_initmemory 	 = 512,
+  $java_maxmemory    = 1024,
+  $wrapper_conf_path = 'UNSET',
 ) {
 
   validate_re($home_dir, '^/')
-  $home_dir_real = $home_dir
+  $home_dir_real      = $home_dir
   $server_config_real = $server_config
   
   $xml_path = "${home_dir_real}/conf/activemq.xml"
+  
+  $wrapper_conf_path_real = $wrapper_conf_path ? {
+  	'UNSET' => "${home_dir_real}/conf/activemq-wrapper.conf",
+  	default => $wrapper_conf_path
+  } 
 
   # Resource defaults
   File {
@@ -44,15 +50,15 @@ class activemq::config (
   
   file { '/var/log/activemq':
     ensure  => directory,
-    path	=> $log_dir,
+    path	  => $log_dir,
     owner   => '0',
     group   => '0',
   }
   
   augeas { 'activemq-wrapper.conf':
     lens    => 'Properties.lns',
-    incl    => "${home_dir_real}/conf/activemq-wrapper.conf",
-    context => "/files/${home_dir_real}/conf/activemq-wrapper.conf",
+    incl    => "${wrapper_conf_path_real}",
+    context => "/files/${wrapper_conf_path_real}",
     changes => [
       "set wrapper.java.initmemory '${java_initmemory}'",
       "set wrapper.java.maxmemory '${java_maxmemory}'",

@@ -13,7 +13,8 @@
 class activemq::packages (
   $name,
   $version,
-  $home = '/usr/share/activemq'
+  $home 		          = '/usr/share/activemq',
+  $custom_init_script = 'UNSET',
 ) {
 
   validate_re($version, '^[._0-9a-zA-Z:-]+$')
@@ -52,13 +53,20 @@ class activemq::packages (
     notify  => Service['activemq'],
   }
 
-  file { '/etc/init.d/activemq':
-    ensure  => file,
-    path    => '/etc/init.d/activemq',
-    content => template("${module_name}/init/activemq"),
-    owner   => '0',
-    group   => '0',
-    mode    => '0755',
+  if $custom_init_script == 'UNSET' {
+	  file { '/etc/init.d/activemq':
+	    ensure  => file,
+	    path    => '/etc/init.d/activemq',
+	    content => template("${module_name}/init/activemq"),
+	    owner   => '0',
+	    group   => '0',
+	    mode    => '0755',
+	  }
+  } else {
+	  file {'/etc/init.d/activemq':
+	    target => $custom_init_script,
+	    ensure => link,    
+	  } 
   }
 
 }
