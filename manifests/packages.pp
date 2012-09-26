@@ -33,7 +33,7 @@ class activemq::packages (
     ensure  => 'present',
     comment => 'Apache Activemq',
     gid     => '92',
-    home    => '/usr/share/activemq',
+    home    => $home_real,
     shell   => '/bin/bash',
     uid     => '92',
     before  => Package['activemq'],
@@ -52,8 +52,6 @@ class activemq::packages (
     notify  => Service['activemq'],
   }
 
-  # JJM Fix the activemq init script always exiting with status 0
-  # FIXME This should be corrected in the upstream packages
   file { '/etc/init.d/activemq':
     ensure  => file,
     path    => '/etc/init.d/activemq',

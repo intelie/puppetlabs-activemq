@@ -25,22 +25,25 @@
 # }
 #
 class activemq(
-  $version       = 'present',
-  $ensure        = 'running',
-  $webconsole    = true,
-  $server_config = 'UNSET',
-  $packagename	 = 'activemq',
-  $path_config	 = '/etc/activemq/activemq.xml',
+  $version       	= 'present',
+  $ensure        	= 'running',
+  $webconsole    	= true,
+  $server_config 	= 'UNSET',
+  $packagename	 	= 'activemq',
+  $home_dir		    = "/usr/share/activemq",
+  $java_initmemory,
+  $java_maxmemory,
 ) {
 
   validate_re($ensure, '^running$|^stopped$')
   validate_re($version, '^present$|^latest$|^[._0-9a-zA-Z:-]+$')
   validate_bool($webconsole)
 
-  $version_real = $version
-  $ensure_real  = $ensure
-  $webconsole_real = $webconsole
+  $version_real     = $version
+  $ensure_real      = $ensure
+  $webconsole_real  = $webconsole
   $packagename_real = $packagename
+  $home_dir_real	= $home_dir
 
   # Since this is a template, it should come _after_ all variables are set for
   # this class.
@@ -62,10 +65,12 @@ class activemq(
   }
 
   class { 'activemq::config':
-    server_config => $server_config_real,
-    require       => Class['activemq::packages'],
-    notify        => Class['activemq::service'],
-    path		  => $path_config,
+    server_config 	=> $server_config_real,
+    require       	=> Class['activemq::packages'],
+    notify        	=> Class['activemq::service'],
+    path		  	=> "${home_dir}/conf/activemq.xml",
+    java_initmemory => $java_initmemory,
+    java_maxmemory 	=> $java_maxmemory,
   }
 
   class { 'activemq::service':
