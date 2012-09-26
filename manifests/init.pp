@@ -29,7 +29,8 @@ class activemq(
   $ensure        = 'running',
   $webconsole    = true,
   $server_config = 'UNSET',
-  $packagename	 = 'activemq'
+  $packagename	 = 'activemq',
+  $path_config	 = '/etc/activemq/activemq.xml',
 ) {
 
   validate_re($ensure, '^running$|^stopped$')
@@ -64,6 +65,7 @@ class activemq(
     server_config => $server_config_real,
     require       => Class['activemq::packages'],
     notify        => Class['activemq::service'],
+    path		  => $path_config,
   }
 
   class { 'activemq::service':
