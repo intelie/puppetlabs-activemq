@@ -16,8 +16,8 @@ class activemq::config (
   $log4j_config        = 'UNSET',
   $log4j_config_path   = 'UNSET',
   $wrapper_config_path = 'UNSET',
-  $home_dir 	   	     = '/usr/share/activemq',
-  $log_dir 		   	     = '/var/log/activemq',
+  $home_dir 	   	     = 'UNSET',
+  $log_dir 		   	     = 'UNSET',
   $webconsole          = true, 
   $java_initmemory 	   = 512,
   $java_maxmemory      = 1024,
@@ -31,6 +31,16 @@ class activemq::config (
   $server_config_real = $server_config
   $log4j_config_real  = $log4j_config
   $webconsole_real    = $webconsole
+
+  $home_dir_real = $home_dir ? {
+    'UNSET'  => '/usr/share/activemq',
+    default  => $home_dir
+  }
+  
+  $log_dir_real = $log_dir ? {
+    'UNSET'  => '/var/log/activemq',
+    default  => $log_dir
+  }
   
   $server_config_path_real = $server_config_path ? {
     'UNSET'  => "${home_dir_real}/conf/activemq.xml",
