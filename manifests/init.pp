@@ -37,6 +37,7 @@ class activemq(
   $wrapper_config_path,
   $java_initmemory,
   $java_maxmemory,
+  $webconsole,
   $custom_init_script,
 ) {
 
@@ -72,6 +73,7 @@ class activemq(
     log_dir             => $log_dir,
     java_initmemory     => $java_initmemory,
     java_maxmemory 	    => $java_maxmemory,
+    webconsole          => $webconsole,
     notify              => Class['activemq::service'],
   }
 
