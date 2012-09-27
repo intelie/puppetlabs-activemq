@@ -13,6 +13,7 @@
 class activemq::config (
   $server_config       = 'UNSET',
   $server_config_path  = 'UNSET',
+  $log4j_config        = 'UNSET',
   $log4j_config_path   = 'UNSET',
   $wrapper_config_path = 'UNSET',
   $home_dir 	   	     = '/usr/share/activemq',
@@ -28,6 +29,7 @@ class activemq::config (
   $home_dir_real      = $home_dir
   $log_dir_real       = $log_dir
   $server_config_real = $server_config
+  $log4j_config_real  = $log4j_config
   $webconsole_real    = $webconsole
   
   $server_config_path_real = $server_config_path ? {
@@ -45,12 +47,17 @@ class activemq::config (
   	default => $wrapper_config_path
   }
   
-  # Since this is a template, it should come _after_ all variables are set for
+  # Since these are templates, they should come _after_ all variables are set for
   # this class.
   $server_config_real = $server_config ? {
     'UNSET' => template("${module_name}/activemq.xml.erb"),
     default => $server_config,
-  } 
+  }
+  
+  $log4j_config_real = $log4j_config ? {
+    'UNSET' => template("${module_name}/log4j.properties.erb"),
+    default => $log4j_config,
+  }  
 
   # Resource defaults
   File {
@@ -75,7 +82,7 @@ class activemq::config (
     path    => $log4j_config_path_real,
     owner   => '0',
     group   => '0',
-    content => $server_config_real,
+    content => $log4j_config_real,
   }
   
   file { '/var/log/activemq':

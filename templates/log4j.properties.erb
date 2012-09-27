@@ -49,7 +49,7 @@ log4j.appender.stdout.layout.ConversionPattern=%-5p %-30.30c{1} - %m%n
 
 # File appender
 log4j.appender.out=org.apache.log4j.RollingFileAppender
-log4j.appender.out.file=${activemq.base}/log/activemq.log
+log4j.appender.out.file=<%= @log_dir_real %>/activemq.log
 log4j.appender.out.maxFileSize=10240KB
 log4j.appender.out.maxBackupIndex=50
 log4j.appender.out.append=true
@@ -58,7 +58,7 @@ log4j.appender.out.layout.ConversionPattern=%d [%-15.15t] %-5p %-30.30c{1} - %m%
 
 # Message logging
 log4j.appender.messages=org.apache.log4j.RollingFileAppender
-log4j.appender.messages.file=${activemq.base}/log/messages.log
+log4j.appender.messages.file=<%= @log_dir_real %>/messages.log
 log4j.appender.messages.maxFileSize=10240KB
 log4j.appender.messages.maxBackupIndex=50
 log4j.appender.messages.append=true
