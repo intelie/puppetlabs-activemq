@@ -28,17 +28,17 @@ class activemq(
   $version        	    = 'present',
   $ensure          	    = 'running',
   $packagename	   	    = 'activemq',
-  $home_dir,
-  $log_dir,
-  $server_config,
-  $server_config_path,
-  $log4j_config,
-  $log4j_config_path,
-  $wrapper_config_path,
-  $init_script_path,
-  $java_initmemory,
-  $java_maxmemory,
-  $webconsole,
+  $home_dir             = undef, #defined by underlying class unless especified
+  $log_dir              = undef, #defined by underlying class unless especified
+  $server_config        = undef, #defined by underlying class unless especified
+  $server_config_path   = undef, #defined by underlying class unless especified
+  $log4j_config         = undef, #defined by underlying class unless especified
+  $log4j_config_path    = undef, #defined by underlying class unless especified
+  $wrapper_config_path  = undef, #defined by underlying class unless especified
+  $init_script_path     = undef, #defined by underlying class unless especified
+  $java_initmemory      = undef, #defined by underlying class unless especified
+  $java_maxmemory       = undef, #defined by underlying class unless especified
+  $webconsole           = undef, #defined by underlying class unless especified
 ) {
 
   validate_re($ensure, '^running$|^stopped$')
