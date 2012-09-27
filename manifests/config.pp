@@ -11,23 +11,45 @@
 # Sample Usage:
 #
 class activemq::config (
-  $server_config,
-  $home_dir 	   	 = '/usr/share/activemq',
-  $log_dir 		   	 = '/var/log/activemq', 
-  $java_initmemory 	 = 512,
-  $java_maxmemory    = 1024,
-  $wrapper_conf_path = 'UNSET',
+  $server_config       = 'UNSET',
+  $server_config_path  = 'UNSET',
+  $log4j_config_path   = 'UNSET',
+  $wrapper_config_path = 'UNSET',
+  $home_dir 	   	     = '/usr/share/activemq',
+  $log_dir 		   	     = '/var/log/activemq',
+  $webconsole          = true, 
+  $java_initmemory 	   = 512,
+  $java_maxmemory      = 1024,
 ) {
 
+  validate_bool($webconsole)
   validate_re($home_dir, '^/')
+  
   $home_dir_real      = $home_dir
+  $log_dir_real       = $log_dir
   $server_config_real = $server_config
+  $webconsole_real    = $webconsole
   
-  $xml_path = "${home_dir_real}/conf/activemq.xml"
+  $server_config_path_real = $server_config_path ? {
+    'UNSET'  => "${home_dir_real}/conf/activemq.xml",
+     default => $server_config_path
+  }
+   
+  $log4j_config_path_real = $log4j_config_path ?{
+    'UNSET'  => "${home_dir_real}/conf/log4j.properties",
+    default  => $log4j_config_path
+  }
   
-  $wrapper_conf_path_real = $wrapper_conf_path ? {
+  $wrapper_config_path_real = $wrapper_config_path ? {
   	'UNSET' => "${home_dir_real}/conf/activemq-wrapper.conf",
-  	default => $wrapper_conf_path
+  	default => $wrapper_config_path
+  }
+  
+  # Since this is a template, it should come _after_ all variables are set for
+  # this class.
+  $server_config_real = $server_config ? {
+    'UNSET' => template("${module_name}/activemq.xml.erb"),
+    default => $server_config,
   } 
 
   # Resource defaults
@@ -42,7 +64,15 @@ class activemq::config (
   # The configuration file itself.
   file { 'activemq.xml':
     ensure  => file,
-    path    => $xml_path,
+    path    => $server_config_path_real,
+    owner   => '0',
+    group   => '0',
+    content => $server_config_real,
+  }
+  
+  file { 'log4j.properties':
+    ensure  => file,
+    path    => $log4j_config_path_real,
     owner   => '0',
     group   => '0',
     content => $server_config_real,
@@ -50,24 +80,23 @@ class activemq::config (
   
   file { '/var/log/activemq':
     ensure  => directory,
-    path	  => $log_dir,
+    path	  => $log_dir_real,
     owner   => '0',
     group   => '0',
   }
   
   augeas { 'activemq-wrapper.conf':
     lens    => 'Properties.lns',
-    incl    => "${wrapper_conf_path_real}",
-    context => "/files/${wrapper_conf_path_real}",
+    incl    => "${wrapper_config_path_real}",
+    context => "/files/${wrapper_config_path_real}",
     changes => [
       "set wrapper.java.initmemory '${java_initmemory}'",
       "set wrapper.java.maxmemory '${java_maxmemory}'",
       "set set.default.ACTIVEMQ_HOME '${home_dir_real}'",
       "set set.default.ACTIVEMQ_BASE '${home_dir_real}'",
-      "set wrapper.logfile '${log_dir}/wrapper.log'",
+      "set wrapper.logfile '${log_dir_real}/wrapper.log'",
       "set wrapper.logfile.maxsize '50m'",
       "set wrapper.logfile.maxfiles '7'",
     ],
   }
-
 }

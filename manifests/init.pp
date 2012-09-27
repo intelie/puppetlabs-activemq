@@ -25,34 +25,25 @@
 # }
 #
 class activemq(
-  $version        	   = 'present',
-  $ensure          	   = 'running',
-  $webconsole     	   = true,
-  $server_config  	   = 'UNSET',
-  $packagename	   	   = 'activemq',
-  $home_dir		         = "/usr/share/activemq",
+  $version        	    = 'present',
+  $ensure          	    = 'running',
+  $packagename	   	    = 'activemq',
+  $home_dir,
+  $server_config,
+  $server_config_path,
+  $wrapper_config_path,
+  $log4j_config_path,
   $java_initmemory,
   $java_maxmemory,
-  $wrapper_conf_path,
   $custom_init_script,
 ) {
 
   validate_re($ensure, '^running$|^stopped$')
   validate_re($version, '^present$|^latest$|^[._0-9a-zA-Z:-]+$')
-  validate_bool($webconsole)
 
   $version_real     = $version
   $ensure_real      = $ensure
-  $webconsole_real  = $webconsole
   $packagename_real = $packagename
-  $home_dir_real	  = $home_dir
-
-  # Since this is a template, it should come _after_ all variables are set for
-  # this class.
-  $server_config_real = $server_config ? {
-    'UNSET' => template("${module_name}/activemq.xml.erb"),
-    default => $server_config,
-  }
 
   # Anchors for containing the implementation class
   anchor { 'activemq::begin':
@@ -63,19 +54,21 @@ class activemq(
   class { 'activemq::packages':
   	name               => $packagename_real,
     version            => $version_real,
-    home		           => $home_dir_real,
+    home		           => $home_dir,
     custom_init_script => $custom_init_script,
     notify  	         => Class['activemq::service'],
   }
 
   class { 'activemq::config':
-    server_config 	  => $server_config_real,
-    require       	  => Class['activemq::packages'],
-    notify        	  => Class['activemq::service'],
-    home_dir		      => $home_dir,
-    wrapper_conf_path => $wrapper_conf_path,
-    java_initmemory   => $java_initmemory,
-    java_maxmemory 	  => $java_maxmemory,
+    require             => Class['activemq::packages'],
+    server_config 	    => $server_config,
+    server_config_path  => $server_config_path,
+    wrapper_config_path => $wrapper_config_path,
+    log4j_config_path   => $log4j_config_path,
+    home_dir		        => $home_dir,
+    java_initmemory     => $java_initmemory,
+    java_maxmemory 	    => $java_maxmemory,
+    notify              => Class['activemq::service'],
   }
 
   class { 'activemq::service':
@@ -87,4 +80,3 @@ class activemq(
   }
 
 }
-
