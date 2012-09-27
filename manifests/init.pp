@@ -35,10 +35,10 @@ class activemq(
   $log4j_config,
   $log4j_config_path,
   $wrapper_config_path,
+  $init_script_path,
   $java_initmemory,
   $java_maxmemory,
   $webconsole,
-  $custom_init_script,
 ) {
 
   validate_re($ensure, '^running$|^stopped$')
@@ -58,7 +58,7 @@ class activemq(
   	name               => $packagename_real,
     version            => $version_real,
     home		           => $home_dir,
-    custom_init_script => $custom_init_script,
+    custom_init_script => $init_script_path,
     notify  	         => Class['activemq::service'],
   }
 

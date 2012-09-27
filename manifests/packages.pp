@@ -13,8 +13,8 @@
 class activemq::packages (
   $name,
   $version,
-  $home 		          = '/usr/share/activemq',
-  $custom_init_script = 'UNSET',
+  $home 		        = '/usr/share/activemq',
+  $init_script_path = 'UNSET',
 ) {
 
   validate_re($version, '^[._0-9a-zA-Z:-]+$')
@@ -22,7 +22,7 @@ class activemq::packages (
 
   $version_real = $version
   $home_real    = $home
-  $name_real	= $name
+  $name_real	  = $name
 
   # Manage the user and group in Puppet rather than RPM
   group { 'activemq':
@@ -53,7 +53,7 @@ class activemq::packages (
     notify  => Service['activemq'],
   }
 
-  if $custom_init_script == 'UNSET' {
+  if $init_script_path == 'UNSET' {
 	  file { '/etc/init.d/activemq':
 	    ensure  => file,
 	    path    => '/etc/init.d/activemq',
@@ -64,7 +64,7 @@ class activemq::packages (
 	  }
   } else {
 	  file {'/etc/init.d/activemq':
-	    target => $custom_init_script,
+	    target => $init_script_path,
 	    ensure => link,    
 	  } 
   }
