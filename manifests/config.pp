@@ -23,10 +23,7 @@ class activemq::config (
   $java_maxmemory      = 1024,
 ) {
 
-  validate_bool($webconsole)
-  
-  $server_config_real = $server_config
-  $log4j_config_real  = $log4j_config
+  validate_bool($webconsole)  
   $webconsole_real    = $webconsole
 
   $home_dir_real = $home_dir ? {
