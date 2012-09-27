@@ -25,8 +25,6 @@ class activemq::config (
 
   validate_bool($webconsole)
   
-  $home_dir_real      = $home_dir
-  $log_dir_real       = $log_dir
   $server_config_real = $server_config
   $log4j_config_real  = $log4j_config
   $webconsole_real    = $webconsole
