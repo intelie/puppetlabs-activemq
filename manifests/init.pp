@@ -55,11 +55,11 @@ class activemq(
   }
 
   class { 'activemq::packages':
-  	name               => $packagename_real,
+    name               => $packagename_real,
     version            => $version_real,
-    home		           => $home_dir,
-    custom_init_script => $init_script_path,
-    notify  	         => Class['activemq::service'],
+    home               => $home_dir,
+    init_script_path   => $init_script_path,
+    notify             => Class['activemq::service'],
   }
 
   class { 'activemq::config':
