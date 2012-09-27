@@ -11,21 +11,21 @@
 # Sample Usage:
 #
 class activemq::packages (
-  $name,
-  $version,
+  $name             = undef,
+  $version          = present,
   $home 		        = '/usr/share/activemq',
   $init_script_path = 'UNSET',
 ) {
 
   validate_re($version, '^[._0-9a-zA-Z:-]+$')
-
+  
   $version_real = $version
   $home_real    = $home
-  $name_real	  = $name
+  $name_real    = $name
 
   # Manage the user and group in Puppet rather than RPM
   group { 'activemq':
-    ensure => 'present',
+    ensure => present,
     gid    => '92',
     before => User['activemq']
   }
@@ -47,7 +47,7 @@ class activemq::packages (
   }
 
   package { 'activemq':
-  	name	=> $name_real,
+  	name	  => $name_real,
     ensure  => $version_real,
     notify  => Service['activemq'],
   }
