@@ -24,7 +24,6 @@ class activemq::config (
 ) {
 
   validate_bool($webconsole)
-  validate_re($home_dir, '^/')
   
   $home_dir_real      = $home_dir
   $log_dir_real       = $log_dir

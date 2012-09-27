@@ -18,7 +18,6 @@ class activemq::packages (
 ) {
 
   validate_re($version, '^[._0-9a-zA-Z:-]+$')
-  validate_re($home, '^/')
 
   $version_real = $version
   $home_real    = $home
