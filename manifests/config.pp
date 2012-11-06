@@ -92,7 +92,7 @@ class intelie_activemq::config (
   augeas { 'activemq-wrapper.conf':
     lens    => 'Properties.lns',
     incl    => "${wrapper_config_path_real}",
-    context => "/files/${wrapper_config_path_real}",
+    context => "/files${wrapper_config_path_real}",
     changes => [
       "set wrapper.java.initmemory '${java_initmemory}'",
       "set wrapper.java.maxmemory '${java_maxmemory}'",
@@ -103,4 +103,13 @@ class intelie_activemq::config (
       "set wrapper.logfile.maxfiles '7'",
     ],
   }
+  
+  if ($home_dir_real == '/usr/share/activemq') {
+    file {'/etc/activemq':
+      target => $home_dir_real,
+      ensure => link,
+      force  => true,    
+    }    
+  }
+ 
 }
