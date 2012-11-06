@@ -24,7 +24,7 @@ class intelie_activemq::service(
     ensure     => $ensure_real,
     hasstatus  => true,
     hasrestart => true,
-    require    => Class['activemq::packages'],
+    require    => Class['packages'],
   }
 
 }
