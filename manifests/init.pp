@@ -1,4 +1,4 @@
-# Class: activemq
+# Class: intelie_activemq
 #
 # This module manages the ActiveMQ messaging middleware.
 #
@@ -13,18 +13,18 @@
 # Sample Usage:
 #
 # node default {
-#   class { 'activemq': }
+#   class { 'intelie_activemq': }
 # }
 #
 # To supply your own configuration file:
 #
 # node default {
-#   class { 'activemq':
+#   class { 'intelie_activemq':
 #     server_config => template('site/activemq.xml.erb'),
 #   }
 # }
 #
-class activemq(
+class intelie_activemq(
   $version        	    = 'present',
   $ensure          	    = 'running',
   $packagename	   	    = 'activemq',
@@ -49,21 +49,21 @@ class activemq(
   $packagename_real = $packagename
 
   # Anchors for containing the implementation class
-  anchor { 'activemq::begin':
-    before => Class['activemq::packages'],
-    notify => Class['activemq::service'],
+  anchor { 'begin':
+    before => Class['packages'],
+    notify => Class['service'],
   }
 
-  class { 'activemq::packages':
+  class { 'packages':
     name               => $packagename_real,
     version            => $version_real,
     home               => $home_dir,
     init_script_path   => $init_script_path,
-    notify             => Class['activemq::service'],
+    notify             => Class['service'],
   }
 
-  class { 'activemq::config':
-    require             => Class['activemq::packages'],
+  class { 'config':
+    require             => Class['packages'],
     server_config 	    => $server_config,
     server_config_path  => $server_config_path,
     log4j_config        => $log4j_config,
@@ -74,15 +74,15 @@ class activemq(
     java_initmemory     => $java_initmemory,
     java_maxmemory 	    => $java_maxmemory,
     webconsole          => $webconsole,
-    notify              => Class['activemq::service'],
+    notify              => Class['service'],
   }
 
-  class { 'activemq::service':
+  class { 'service':
     ensure => $ensure_real,
   }
 
-  anchor { 'activemq::end':
-    require => Class['activemq::service'],
+  anchor { 'end':
+    require => Class['service'],
   }
 
 }

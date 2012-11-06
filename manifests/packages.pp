@@ -1,4 +1,4 @@
-# Class: activemq::packages
+# Class: intelie_activemq::packages
 #
 #   ActiveMQ Packages
 #
@@ -10,7 +10,7 @@
 #
 # Sample Usage:
 #
-class activemq::packages (
+class intelie_activemq::packages (
   $name             = undef,
   $version          = present,
   $home 		        = '/usr/share/activemq',

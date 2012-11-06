@@ -1,4 +1,4 @@
-# Class: activemq::config
+# Class: intelie_activemq::config
 #
 #   class description goes here.
 #
@@ -10,7 +10,7 @@
 #
 # Sample Usage:
 #
-class activemq::config (
+class intelie_activemq::config (
   $server_config       = 'UNSET',
   $server_config_path  = 'UNSET',
   $log4j_config        = 'UNSET',

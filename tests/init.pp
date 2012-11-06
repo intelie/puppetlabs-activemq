@@ -6,7 +6,7 @@ node default {
     version      => 'latest',
   }
   ->
-  class  { 'activemq':
+  class  { 'intelie_activemq':
     webconsole => true,
   }
   ->

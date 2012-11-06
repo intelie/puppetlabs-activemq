@@ -1,4 +1,4 @@
-# Class: activemq::service
+# Class: intelie_activemq::service
 #
 #   Manage the ActiveMQ Service
 #
@@ -10,7 +10,7 @@
 #
 # Sample Usage:
 #
-class activemq::service(
+class intelie_activemq::service(
   $ensure
 ) {
 
