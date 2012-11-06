@@ -104,12 +104,4 @@ class intelie_activemq::config (
     ],
   }
   
-  if ($home_dir_real == '/usr/share/activemq') {
-    file {'/etc/activemq':
-      target => $home_dir_real,
-      ensure => link,
-      force  => true,    
-    }    
-  }
- 
 }
