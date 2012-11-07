@@ -69,26 +69,20 @@ class intelie_activemq::config (
   file { 'activemq.xml':
     ensure  => file,
     path    => $server_config_path_real,
-    owner   => '0',
-    group   => '0',
     content => $server_config_real,
   }
   
   file { 'log4j.properties':
     ensure  => file,
     path    => $log4j_config_path_real,
-    owner   => '0',
-    group   => '0',
     content => $log4j_config_real,
   }
   
   file { '/var/log/activemq':
     ensure  => directory,
     path	  => $log_dir_real,
-    owner   => '0',
-    group   => '0',
   }
-  
+    
   augeas { 'activemq-wrapper.conf':
     lens    => 'Properties.lns',
     incl    => "${wrapper_config_path_real}",
