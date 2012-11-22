@@ -16,33 +16,21 @@ class intelie_activemq::packages (
   $home             = '/usr/share/activemq',
   $user             = 'activemq',
   $group            = 'activemq',
-  $user_id          = undef,
-  $group_id         = undef,
-  $is_system        = true,
-  $password         = undef,
-  $manage_home      = true,
   $init_script_path = 'UNSET',
 ) {
 
   validate_re($version, '^[._0-9a-zA-Z:-]+$')
+    
+  file { $home:
+    ensure => directory,
+    owner  => $user,
+    group  => $group,
+    mode   => '0755',
+    before => Package['activemq'],    
+  }
   
-  group {$group:
-    ensure => present,
-    gid    => $group_id,
-    system => $is_system,
-  } ->
-  user {$user:
-    ensure     => present,
-    uid        => $user_id,
-    gid        => $group_id,
-    groups     => $group,
-    system     => $is_system,
-    password   => $password,
-    home       => $home,
-    managehome => $manage_home
-  } ->
   package { 'activemq':
-  	name	  => $name,
+    name    => $name,
     ensure  => $version,
     notify  => Service['activemq'],
   }

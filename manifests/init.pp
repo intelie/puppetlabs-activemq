@@ -30,11 +30,6 @@ class intelie_activemq(
   $packagename          = 'activemq',
   $user                 = 'activemq',
   $group                = 'activemq',
-  $user_id              = undef, #defined by underlying class unless especified
-  $group_id             = undef, #defined by underlying class unless especified
-  $is_system            = undef, #defined by underlying class unless especified
-  $password             = undef, #defined by underlying class unless especified
-  $manage_home          = undef, #defined by underlying class unless especified
   $home_dir             = undef, #defined by underlying class unless especified
   $log_dir              = undef, #defined by underlying class unless especified
   $server_config        = undef, #defined by underlying class unless especified
@@ -67,11 +62,6 @@ class intelie_activemq(
     home               => $home_dir,
     user               => $user,
     group              => $group,
-    user_id            => $user_id,
-    group_id           => $group_id,
-    is_system          => $is_system,
-    password           => $password,
-    manage_home        => $manage_home,
     init_script_path   => $init_script_path,
     notify             => Class['service'],
   }
