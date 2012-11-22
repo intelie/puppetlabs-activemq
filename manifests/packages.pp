@@ -13,42 +13,37 @@
 class intelie_activemq::packages (
   $name             = undef,
   $version          = present,
-  $home 		        = '/usr/share/activemq',
+  $home             = '/usr/share/activemq',
+  $user             = 'activemq',
+  $group            = 'activemq',
+  $user_id          = undef,
+  $group_id         = undef,
+  $is_system        = true,
+  $password         = undef,
+  $manage_home      = true,
   $init_script_path = 'UNSET',
 ) {
 
   validate_re($version, '^[._0-9a-zA-Z:-]+$')
   
-  $version_real = $version
-  $home_real    = $home
-  $name_real    = $name
-
-  # Manage the user and group in Puppet rather than RPM
-  group { 'activemq':
+  group {$group:
     ensure => present,
-    gid    => '92',
-    before => User['activemq']
-  }
-  user { 'activemq':
-    ensure  => 'present',
-    comment => 'Apache Activemq',
-    gid     => '92',
-    home    => $home_real,
-    shell   => '/bin/bash',
-    uid     => '92',
-    before  => Package['activemq'],
-  }
-  file { $home_real:
-    ensure => directory,
-    owner  => '0',
-    group  => '0',
-    mode   => '0755',
-    before => Package['activemq'],
-  }
-
+    gid    => $group_id,
+    system => $is_system,
+  } ->
+  user {$user:
+    ensure     => present,
+    uid        => $user_id,
+    gid        => $group_id,
+    groups     => $group,
+    system     => $is_system,
+    password   => $password,
+    home       => $home,
+    managehome => $manage_home
+  } ->
   package { 'activemq':
-  	name	  => $name_real,
-    ensure  => $version_real,
+  	name	  => $name,
+    ensure  => $version,
     notify  => Service['activemq'],
   }
 
@@ -57,8 +52,8 @@ class intelie_activemq::packages (
 	    ensure  => file,
 	    path    => '/etc/init.d/activemq',
 	    content => template("${module_name}/init/activemq"),
-	    owner   => '0',
-	    group   => '0',
+	    owner   => $user,
+	    group   => $group,
 	    mode    => '0755',
 	  }
   } else {

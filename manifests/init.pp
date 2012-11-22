@@ -25,9 +25,16 @@
 # }
 #
 class intelie_activemq(
-  $version        	    = 'present',
-  $ensure          	    = 'running',
-  $packagename	   	    = 'activemq',
+  $version              = 'present',
+  $ensure               = 'running',
+  $packagename          = 'activemq',
+  $user                 = 'activemq',
+  $group                = 'activemq',
+  $user_id              = undef, #defined by underlying class unless especified
+  $group_id             = undef, #defined by underlying class unless especified
+  $is_system            = undef, #defined by underlying class unless especified
+  $password             = undef, #defined by underlying class unless especified
+  $manage_home          = undef, #defined by underlying class unless especified
   $home_dir             = undef, #defined by underlying class unless especified
   $log_dir              = undef, #defined by underlying class unless especified
   $server_config        = undef, #defined by underlying class unless especified
@@ -58,21 +65,30 @@ class intelie_activemq(
     name               => $packagename_real,
     version            => $version_real,
     home               => $home_dir,
+    user               => $user,
+    group              => $group,
+    user_id            => $user_id,
+    group_id           => $group_id,
+    is_system          => $is_system,
+    password           => $password,
+    manage_home        => $manage_home,
     init_script_path   => $init_script_path,
     notify             => Class['service'],
   }
 
   class { 'config':
     require             => Class['packages'],
-    server_config 	    => $server_config,
+    user                => $user,
+    group               => $group,
+    server_config       => $server_config,
     server_config_path  => $server_config_path,
     log4j_config        => $log4j_config,
     log4j_config_path   => $log4j_config_path,
     wrapper_config_path => $wrapper_config_path,
-    home_dir		        => $home_dir,
+    home_dir            => $home_dir,
     log_dir             => $log_dir,
     java_initmemory     => $java_initmemory,
-    java_maxmemory 	    => $java_maxmemory,
+    java_maxmemory      => $java_maxmemory,
     webconsole          => $webconsole,
     notify              => Class['service'],
   }

@@ -16,11 +16,13 @@ class intelie_activemq::config (
   $log4j_config        = 'UNSET',
   $log4j_config_path   = 'UNSET',
   $wrapper_config_path = 'UNSET',
-  $home_dir 	   	     = '/usr/share/activemq',
-  $log_dir 		   	     = '/var/log/activemq',
+  $home_dir            = '/usr/share/activemq',
+  $log_dir             = '/var/log/activemq',
   $webconsole          = true, 
-  $java_initmemory 	   = 512,
+  $java_initmemory     = 512,
   $java_maxmemory      = 1024,
+  $user                = 'activemq',
+  $group               = 'activemq',
 ) {
 
   validate_bool($webconsole)
@@ -58,8 +60,8 @@ class intelie_activemq::config (
 
   # Resource defaults
   File {
-    owner   => 'activemq',
-    group   => 'activemq',
+    owner   => $user,
+    group   => $group,
     mode    => '0644',
     notify  => Service['activemq'],
     require => Package['activemq'],
@@ -69,24 +71,18 @@ class intelie_activemq::config (
   file { 'activemq.xml':
     ensure  => file,
     path    => $server_config_path_real,
-    owner   => '0',
-    group   => '0',
     content => $server_config_real,
   }
   
   file { 'log4j.properties':
     ensure  => file,
     path    => $log4j_config_path_real,
-    owner   => '0',
-    group   => '0',
     content => $log4j_config_real,
   }
   
   file { '/var/log/activemq':
-    ensure  => directory,
-    path	  => $log_dir_real,
-    owner   => '0',
-    group   => '0',
+    ensure => directory,
+    path   => $log_dir_real,
   }
   
   augeas { 'activemq-wrapper.conf':
