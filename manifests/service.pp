@@ -27,7 +27,7 @@ class intelie_activemq::service(
     ensure  => present,
     owner   => $user,
     group   => $group,
-    notity  => Service['activemq'],
+    notify  => Service['activemq'],
   }
 
   service { 'activemq':
