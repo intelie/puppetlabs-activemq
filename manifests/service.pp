@@ -14,7 +14,7 @@ class intelie_activemq::service(
   $ensure,
   $user,
   $group,
-  $home_dir,
+  $home,
 ) {
 
   # Arrays cannot take anonymous arrays in Puppet 2.6.8
@@ -23,7 +23,7 @@ class intelie_activemq::service(
 
   $ensure_real = $ensure
 
-  file {$home_dir:
+  file {$home:
     ensure  => present,
     owner   => $user,
     group   => $group,

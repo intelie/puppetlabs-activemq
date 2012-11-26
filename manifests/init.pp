@@ -30,7 +30,7 @@ class intelie_activemq(
   $packagename          = 'activemq',
   $user                 = 'activemq',
   $group                = 'activemq',
-  $home_dir             = undef, #defined by underlying class unless especified
+  $home_dir             = '/usr/share/activemq',
   $log_dir              = undef, #defined by underlying class unless especified
   $server_config        = undef, #defined by underlying class unless especified
   $server_config_path   = undef, #defined by underlying class unless especified
@@ -59,7 +59,6 @@ class intelie_activemq(
   class { 'packages':
     name               => $packagename_real,
     version            => $version_real,
-    home               => $home_dir,
     user               => $user,
     group              => $group,
     init_script_path   => $init_script_path,
