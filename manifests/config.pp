@@ -72,13 +72,13 @@ class intelie_activemq::config (
     ensure  => file,
     path    => $server_config_path_real,
     content => $server_config_real,
-  } ->
+  } 
   
   file { 'log4j.properties':
     ensure  => file,
     path    => $log4j_config_path_real,
     content => $log4j_config_real,
-  } ->
+  } 
   
   augeas { 'activemq-wrapper.conf':
     lens    => 'Properties.lns',
