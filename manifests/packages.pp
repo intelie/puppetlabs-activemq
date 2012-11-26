@@ -22,11 +22,12 @@ class intelie_activemq::packages (
   validate_re($version, '^[._0-9a-zA-Z:-]+$')
     
   file { $home:
-    ensure => directory,
-    owner  => $user,
-    group  => $group,
-    mode   => '0755',
-    before => Package['activemq'],    
+    ensure  => directory,
+    recurse => true,
+    owner   => $user,
+    group   => $group,
+    mode    => '0755',
+    before  => Package['activemq'],    
   }
   
   package { 'activemq':
