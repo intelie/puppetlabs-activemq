@@ -12,9 +12,6 @@
 #
 class intelie_activemq::service(
   $ensure,
-  $user,
-  $group,
-  $home,
 ) {
 
   # Arrays cannot take anonymous arrays in Puppet 2.6.8
@@ -22,13 +19,6 @@ class intelie_activemq::service(
   validate_re($ensure, $v_ensure)
 
   $ensure_real = $ensure
-
-  file {$home:
-    ensure  => present,
-    owner   => $user,
-    group   => $group,
-    notify  => Service['activemq'],
-  }
 
   service { 'activemq':
     ensure     => $ensure_real,

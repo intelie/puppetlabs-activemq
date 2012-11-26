@@ -72,19 +72,13 @@ class intelie_activemq::config (
     ensure  => file,
     path    => $server_config_path_real,
     content => $server_config_real,
-  }
+  } ->
   
   file { 'log4j.properties':
     ensure  => file,
     path    => $log4j_config_path_real,
     content => $log4j_config_real,
-  }
-  
-  file { '/var/log/activemq':
-    ensure  => directory,
-    recurse => true,
-    path    => $log_dir_real,
-  }
+  } ->
   
   augeas { 'activemq-wrapper.conf':
     lens    => 'Properties.lns',
@@ -99,6 +93,16 @@ class intelie_activemq::config (
       "set wrapper.logfile.maxsize '50m'",
       "set wrapper.logfile.maxfiles '7'",
     ],
+  } ->
+  
+  file {$home_dir_real:
+    ensure  => present,
+    recurse => true,
+  }
+  
+  file {$log_dir_real:
+    ensure  => present,
+    recurse => true,
   }
   
 }
