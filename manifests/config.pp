@@ -95,6 +95,10 @@ class intelie_activemq::config (
     ],
   } ->
   
+  file {$wrapper_config_path_real:
+    ensure  => present,
+  }  
+  
   file {$home_dir_real:
     ensure  => present,
     recurse => true,
