@@ -109,4 +109,9 @@ class intelie_activemq::config (
     recurse => true,
   }
   
+  file {'/var/run/activemq':
+    ensure  => present,
+    recurse => true,
+  }
+  
 }
