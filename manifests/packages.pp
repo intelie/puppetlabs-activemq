@@ -15,6 +15,7 @@ class intelie_activemq::packages (
   $version          = present,
   $user             = 'activemq',
   $group            = 'activemq',
+  $home             = undef,
   $init_script_path = 'UNSET',
 ) {
 

@@ -61,6 +61,7 @@ class intelie_activemq(
     version            => $version_real,
     user               => $user,
     group              => $group,
+    home               => $home_dir,
     init_script_path   => $init_script_path,
     notify             => Class['service'],
   }
