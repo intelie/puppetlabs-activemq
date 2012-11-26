@@ -85,6 +85,9 @@ class intelie_activemq(
 
   class { 'service':
     ensure => $ensure_real,
+    user   => $user,
+    group  => $group,
+    home   => $home_dir,
   }
 
   anchor { 'end':

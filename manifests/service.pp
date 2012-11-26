@@ -11,7 +11,10 @@
 # Sample Usage:
 #
 class intelie_activemq::service(
-  $ensure
+  $ensure,
+  $user,
+  $group,
+  $home_dir,
 ) {
 
   # Arrays cannot take anonymous arrays in Puppet 2.6.8
@@ -19,6 +22,13 @@ class intelie_activemq::service(
   validate_re($ensure, $v_ensure)
 
   $ensure_real = $ensure
+
+  file {$home_dir:
+    ensure  => present,
+    owner   => $user,
+    group   => $group,
+    notity  => Service['activemq'],
+  }
 
   service { 'activemq':
     ensure     => $ensure_real,
