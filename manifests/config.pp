@@ -81,8 +81,9 @@ class intelie_activemq::config (
   }
   
   file { '/var/log/activemq':
-    ensure => directory,
-    path   => $log_dir_real,
+    ensure  => directory,
+    recurse => true,
+    path    => $log_dir_real,
   }
   
   augeas { 'activemq-wrapper.conf':
