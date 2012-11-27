@@ -62,7 +62,6 @@ class intelie_activemq::config (
   File {
     owner   => $user,
     group   => $group,
-    mode    => '0644',
     notify  => Service['activemq'],
     require => Package['activemq'],
   }
@@ -72,12 +71,14 @@ class intelie_activemq::config (
     ensure  => file,
     path    => $server_config_path_real,
     content => $server_config_real,
+    mode    => '0644',
   } 
   
   file { 'log4j.properties':
     ensure  => file,
     path    => $log4j_config_path_real,
     content => $log4j_config_real,
+    mode    => '0644',    
   } 
   
   augeas { 'activemq-wrapper.conf':
@@ -97,6 +98,7 @@ class intelie_activemq::config (
   
   file {$wrapper_config_path_real:
     ensure  => present,
+    mode    => '0644',    
   }  
   
   file {$home_dir_real:
