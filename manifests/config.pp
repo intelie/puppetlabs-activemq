@@ -104,7 +104,8 @@ class intelie_activemq::config (
   file {$home_dir_real:
     ensure  => present,
     recurse => true,
-    links   => follow, 
+    links   => follow,
+    ignore  => 'libexec', 
   }
   
   file {$log_dir_real:
