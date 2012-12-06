@@ -30,6 +30,7 @@ class intelie_activemq::packages (
 
   if $init_script_path == 'UNSET' {
 	  file { '/etc/init.d/activemq':
+	    require => Package['activemq'],
 	    ensure  => file,
 	    path    => '/etc/init.d/activemq',
 	    content => template("${module_name}/init/activemq"),
@@ -39,6 +40,7 @@ class intelie_activemq::packages (
 	  }
   } else {
 	  file {'/etc/init.d/activemq':
+	    require => Package['activemq'],
 	    target => $init_script_path,
 	    ensure => link,    
 	  } 
