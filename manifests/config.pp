@@ -11,19 +11,20 @@
 # Sample Usage:
 #
 class intelie_activemq::config (
-  $init_script         = 'UNSET',  
-  $server_config       = 'UNSET',
-  $server_config_path  = 'UNSET',
-  $log4j_config        = 'UNSET',
-  $log4j_config_path   = 'UNSET',
-  $wrapper_config_path = 'UNSET',
-  $home_dir            = '/usr/share/activemq',
-  $log_dir             = '/var/log/activemq',
-  $webconsole          = true, 
-  $java_initmemory     = 512,
-  $java_maxmemory      = 1024,
-  $user                = 'activemq',
-  $group               = 'activemq',
+  $init_script           = 'UNSET',  
+  $server_config         = 'UNSET',
+  $server_config_path    = 'UNSET',
+  $log4j_config          = 'UNSET',
+  $log4j_config_path     = 'UNSET',
+  $wrapper_config_path   = 'UNSET',
+  $wrapper_conf_template = undef,
+  $home_dir              = '/usr/share/activemq',
+  $log_dir               = '/var/log/activemq',
+  $webconsole            = true, 
+  $java_initmemory       = 512,
+  $java_maxmemory        = 1024,
+  $user                  = 'activemq',
+  $group                 = 'activemq',
 ) {
 
   validate_bool($webconsole)
@@ -92,25 +93,34 @@ class intelie_activemq::config (
     mode    => '0644',    
   } 
   
-  augeas { 'activemq-wrapper.conf':
-    lens    => 'Properties.lns',
-    incl    => "${wrapper_config_path_real}",
-    context => "/files${wrapper_config_path_real}",
-    changes => [
-      "set wrapper.java.initmemory '${java_initmemory}'",
-      "set wrapper.java.maxmemory '${java_maxmemory}'",
-      "set set.default.ACTIVEMQ_HOME '${home_dir_real}'",
-      "set set.default.ACTIVEMQ_BASE '${home_dir_real}'",
-      "set wrapper.logfile '${log_dir_real}/wrapper.log'",
-      "set wrapper.logfile.maxsize '50m'",
-      "set wrapper.logfile.maxfiles '7'",
-    ],
-  } ->
-  
-  file {$wrapper_config_path_real:
-    ensure  => present,
-    mode    => '0644',    
-  }  
+  if $wrapper_conf_template != undef {
+    file {'activemq-wrapper.conf':
+      ensure  => file,
+      path    => $wrapper_config_path_real,
+      mode    => 0644,
+      content => $wrapper_conf_template,
+    }  
+  } else {
+    augeas {'activemq-wrapper.conf':
+      lens    => 'Properties.lns',
+      incl    => "${wrapper_config_path_real}",
+      context => "/files${wrapper_config_path_real}",
+      changes => [
+        "set wrapper.java.initmemory '${java_initmemory}'",
+        "set wrapper.java.maxmemory '${java_maxmemory}'",
+        "set set.default.ACTIVEMQ_HOME '${home_dir_real}'",
+        "set set.default.ACTIVEMQ_BASE '${home_dir_real}'",
+        "set wrapper.logfile '${log_dir_real}/wrapper.log'",
+        "set wrapper.logfile.maxsize '50m'",
+        "set wrapper.logfile.maxfiles '7'",
+      ],
+    } ->
+    file {$wrapper_config_path_real:
+      ensure  => present,
+      mode    => '0644',    
+    }  
+  } 
+ 
   
   file {$home_dir_real:
     ensure  => present,

@@ -25,22 +25,23 @@
 # }
 #
 class intelie_activemq(
-  $version              = 'present',
-  $ensure               = 'running',
-  $packagename          = 'activemq',
-  $user                 = 'activemq',
-  $group                = 'activemq',
-  $home_dir             = '/usr/share/activemq',
-  $log_dir              = undef, #defined by underlying class unless especified
-  $init_script          = undef, #defined by underlying class unless especified
-  $server_config        = undef, #defined by underlying class unless especified
-  $server_config_path   = undef, #defined by underlying class unless especified
-  $log4j_config         = undef, #defined by underlying class unless especified
-  $log4j_config_path    = undef, #defined by underlying class unless especified
-  $wrapper_config_path  = undef, #defined by underlying class unless especified
-  $java_initmemory      = undef, #defined by underlying class unless especified
-  $java_maxmemory       = undef, #defined by underlying class unless especified
-  $webconsole           = undef, #defined by underlying class unless especified
+  $version               = 'present',
+  $ensure                = 'running',
+  $packagename           = 'activemq',
+  $user                  = 'activemq',
+  $group                 = 'activemq',
+  $home_dir              = '/usr/share/activemq',
+  $log_dir               = undef, #defined by underlying class unless especified
+  $init_script           = undef, #defined by underlying class unless especified
+  $server_config         = undef, #defined by underlying class unless especified
+  $server_config_path    = undef, #defined by underlying class unless especified
+  $log4j_config          = undef, #defined by underlying class unless especified
+  $log4j_config_path     = undef, #defined by underlying class unless especified
+  $wrapper_config_path   = undef, #defined by underlying class unless especified
+  $wrapper_conf_template = undef, #defined by underlying class unless especified
+  $java_initmemory       = undef, #defined by underlying class unless especified
+  $java_maxmemory        = undef, #defined by underlying class unless especified
+  $webconsole            = undef, #defined by underlying class unless especified
 ) {
 
   validate_re($ensure, '^running$|^stopped$')
@@ -64,21 +65,22 @@ class intelie_activemq(
   }
 
   class { 'config':
-    require             => Class['packages'],
-    user                => $user,
-    group               => $group,
-    init_script         => $init_script,
-    server_config       => $server_config,
-    server_config_path  => $server_config_path,
-    log4j_config        => $log4j_config,
-    log4j_config_path   => $log4j_config_path,
-    wrapper_config_path => $wrapper_config_path,
-    home_dir            => $home_dir,
-    log_dir             => $log_dir,
-    java_initmemory     => $java_initmemory,
-    java_maxmemory      => $java_maxmemory,
-    webconsole          => $webconsole,
-    notify              => Class['service'],
+    require               => Class['packages'],
+    user                  => $user,
+    group                 => $group,
+    init_script           => $init_script,
+    server_config         => $server_config,
+    server_config_path    => $server_config_path,
+    log4j_config          => $log4j_config,
+    log4j_config_path     => $log4j_config_path,
+    wrapper_config_path   => $wrapper_config_path,
+    wrapper_conf_template => $wrapper_conf_template,
+    home_dir              => $home_dir,
+    log_dir               => $log_dir,
+    java_initmemory       => $java_initmemory,
+    java_maxmemory        => $java_maxmemory,
+    webconsole            => $webconsole,
+    notify                => Class['service'],
   }
 
   class { 'service':
