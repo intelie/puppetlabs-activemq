@@ -32,12 +32,12 @@ class intelie_activemq(
   $group                = 'activemq',
   $home_dir             = '/usr/share/activemq',
   $log_dir              = undef, #defined by underlying class unless especified
+  $init_script          = undef, #defined by underlying class unless especified
   $server_config        = undef, #defined by underlying class unless especified
   $server_config_path   = undef, #defined by underlying class unless especified
   $log4j_config         = undef, #defined by underlying class unless especified
   $log4j_config_path    = undef, #defined by underlying class unless especified
   $wrapper_config_path  = undef, #defined by underlying class unless especified
-  $init_script_path     = undef, #defined by underlying class unless especified
   $java_initmemory      = undef, #defined by underlying class unless especified
   $java_maxmemory       = undef, #defined by underlying class unless especified
   $webconsole           = undef, #defined by underlying class unless especified
@@ -59,10 +59,7 @@ class intelie_activemq(
   class { 'packages':
     name               => $packagename_real,
     version            => $version_real,
-    user               => $user,
-    group              => $group,
     home               => $home_dir,
-    init_script_path   => $init_script_path,
     notify             => Class['service'],
   }
 
@@ -70,6 +67,7 @@ class intelie_activemq(
     require             => Class['packages'],
     user                => $user,
     group               => $group,
+    init_script         => $init_script,
     server_config       => $server_config,
     server_config_path  => $server_config_path,
     log4j_config        => $log4j_config,

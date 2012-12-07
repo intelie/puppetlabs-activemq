@@ -11,6 +11,7 @@
 # Sample Usage:
 #
 class intelie_activemq::config (
+  $init_script         = 'UNSET',  
   $server_config       = 'UNSET',
   $server_config_path  = 'UNSET',
   $log4j_config        = 'UNSET',
@@ -30,7 +31,7 @@ class intelie_activemq::config (
   $webconsole_real = $webconsole
   $home_dir_real   = $home_dir 
   $log_dir_real    = $log_dir
-  
+    
   $server_config_path_real = $server_config_path ? {
     'UNSET'  => "${home_dir_real}/conf/activemq.xml",
      default => $server_config_path
@@ -48,6 +49,11 @@ class intelie_activemq::config (
   
   # Since these are templates, they should come _after_ all variables are set for
   # this class.
+  $init_script_real = $init_script ? {
+    'UNSET' => template("${module_name}/init/activemq.erb"),
+    default => $init_script,
+  }  
+  
   $server_config_real = $server_config ? {
     'UNSET' => template("${module_name}/activemq.xml.erb"),
     default => $server_config,
@@ -66,7 +72,12 @@ class intelie_activemq::config (
     require => Package['activemq'],
   }
 
-  # The configuration file itself.
+  file { '/etc/init.d/activemq':
+    ensure  => file,
+    content => $init_script_real,
+    mode    => '0755',
+  } 
+
   file { 'activemq.xml':
     ensure  => file,
     path    => $server_config_path_real,
@@ -114,7 +125,7 @@ class intelie_activemq::config (
   }
   
   file {'/var/run/activemq':
-    ensure  => present,
+    ensure  => directory,
     recurse => true,
   }
   
