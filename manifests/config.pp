@@ -130,7 +130,7 @@ class intelie_activemq::config (
   }
   
   file {$log_dir_real:
-    ensure  => present,
+    ensure  => directory,
     recurse => true,
   }
   
